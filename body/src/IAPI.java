@@ -1,5 +1,4 @@
 import java.io.IOException;
-import java.net.MalformedURLException;
 
 /**
  * Created by biospore on 9/10/15.
@@ -26,9 +25,9 @@ public interface IAPI {
     *
     * */
     void setProfile(String login, String passw);
-    String searchEntry(String name) throws IOException;
-    void addEntry(String name);
-    void updateEntry(String name);
-    void deleteEntry(String name);
-    String getList() throws IOException;
+    String searchEntry(String name, String type) throws IOException;
+    void addEntry(String name, String type);
+    void updateEntry(String name, String type);
+    void deleteEntry(String name, String type);
+    String getList(String type) throws IOException;
 }

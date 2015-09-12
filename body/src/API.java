@@ -12,34 +12,21 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class API implements IAPI {
+    private String login;
     private String encprofile;
     private StringBuilder sb;
-    private String sharedlisturl;
-    private String searchurl;
-
     /*
     * type:
     *   0 - anime
     *   1 - manga
     * */
-    public API(int type){
+    public API(){
         this.sb = new StringBuilder();
-        switch (type){
-            case 0:
-                this.sharedlisturl = "http://myanimelist.net/api/animelist/";
-                this.searchurl = "http://myanimelist.net/api/anime/search.xml?q=";
-                break;
-/*            case 1:
-                this.sharedlisturl = "http://myanimelist.net/api/mangalist/";
-                this.searchurl = "http://myanimelist.net/api/manga/search.xml?q=";
-                break;
-*/          default:
-                throw new IllegalArgumentException();
-        }
     }
 
     @Override
     public void setProfile(String login, String passw) {
+        this.login = login;
         this.sb.delete(0, this.sb.length());
         this.sb.append(login);
         this.sb.append(":");
@@ -48,71 +35,78 @@ public class API implements IAPI {
     }
 
     @Override
-    public String searchEntry(String name) throws IOException{
+    public String searchEntry(String name, String type) throws IOException{
         this.sb.delete(0, this.sb.length());
-/*        sb.append(this.searchurl);
+        sb.append("http://myanimelist.net/api/");
+        sb.append(type);
+        sb.append("/search.xml?q=");
         sb.append(name.replace(" ", "+"));
-        RequestHandler rh = new RequestHandler(sb.toString());
-        sb.delete(0, sb.length());
-        rh.setType("GET");
-        rh.setProperty("Host", "myanimelist.net");
+
+        HttpURLConnection conn = this.getConnection(sb.toString());
+        conn.setRequestMethod("GET");
+        this.sb.delete(0, this.sb.length());
         sb.append("Basic ");
         sb.append(this.encprofile);
-        rh.setProperty("Authorization", sb.toString());*/
-//        rh.setProperty("Accept", "text/html, inage/gif, image/jpg, *:q=.2, */*; q=.2");
-//        rh.connect();
-        URL uaddr = new URL(this.searchurl.concat(name.replace(" ", "+")));
-        HttpURLConnection conn = (HttpURLConnection) uaddr.openConnection();
-        conn.setUseCaches(false);
-        conn.setDoInput(true);
-        conn.setDoOutput(false);
+        conn.setRequestProperty("Authorization", sb.toString());
+
+        return this.getAnswer(conn);
+    }
+
+    @Override
+    public String getList(String type) throws IOException {
+        this.sb.delete(0, this.sb.length());
+        sb.append("http://myanimelist.net/malappinfo.php?u=");
+        sb.append(this.login);
+        sb.append("&status=all&type=");
+        sb.append(type);
+        HttpURLConnection conn = this.getConnection(sb.toString());
+
         conn.setRequestMethod("GET");
-// /        conn.
 
-//        conn.setRequestProperty("Host", "myanimelist.net");
-        conn.setRequestProperty("Authorization", "Basic ".concat(this.encprofile));
-        conn.setRequestProperty("User-Agent", "kalong/0.1.0");
-//        conn.setRequestProperty("Accept", "*/*");
+        return this.getAnswer(conn);
+    }
 
-        conn.connect();
+    @Override
+    public void addEntry(String name, String type) {
+
+
+    }
+
+    @Override
+    public void updateEntry(String name, String type) {
+
+    }
+
+    @Override
+    public void deleteEntry(String name, String type) {
+
+    }
+
+    private String getAnswer(HttpURLConnection conn) throws IOException {
         if (conn.getResponseCode() == HttpURLConnection.HTTP_OK){
             BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
             String inputs;
+            this.sb.delete(0, this.sb.length());
             while ((inputs = br.readLine()) != null){
-                sb.append(inputs.concat("\n"));
+                sb.append(inputs);
             }
             br.close();
         }
         else{
             throw new HTTPException(conn.getResponseCode());
         }
-
-        return sb.toString();// rh.getAnswer();
+        return sb.toString();
     }
 
-    @Override
-    public String getList() throws IOException {
-        this.sb.delete(0, this.sb.length());
-        String url = "http://myanimelist.net/malappinfo.php?u=__biospore&status=all&type=anime";
-        RequestHandler rh = new RequestHandler(url);
-        rh.setType("GET");
-        rh.setProperty("Host", "myanimelist.net");
-        rh.connect();
-        return rh.getAnswer();
-    }
+    private HttpURLConnection getConnection(String url) throws IOException {
+        URL uaddr = new URL(url);
 
-    @Override
-    public void addEntry(String name) {
+        HttpURLConnection conn = (HttpURLConnection) uaddr.openConnection();
+        conn.setUseCaches(false);
+        conn.setDoInput(true);
+        conn.setDoOutput(false);
+        conn.setRequestProperty("User-Agent", "kalong/0.1.0");
 
-    }
-
-    @Override
-    public void updateEntry(String name) {
-
-    }
-
-    @Override
-    public void deleteEntry(String name) {
-
+        return conn;
     }
 }
