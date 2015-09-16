@@ -1,5 +1,5 @@
 /**
- * Created by biospore on 9/11/15.
+ * Created by biospore on 9/11/15 (2:19 AM).
  */
 
 import com.sun.org.apache.xml.internal.security.utils.Base64;
@@ -11,27 +11,24 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class API implements IAPI {
+//should implements runnable
+public class MyAnimeListAPI implements IMyAnimeListAPI {
     private String login;
-    private String encprofile;
+    private String encodedProfile;
     private StringBuilder sb;
-    /*
-    * type:
-    *   0 - anime
-    *   1 - manga
-    * */
-    public API(){
+
+    public MyAnimeListAPI(){
         this.sb = new StringBuilder();
     }
 
     @Override
-    public void setProfile(String login, String passw) {
-        this.login = login;
+    public void setProfile(IProfile profile) {
+        this.login = profile.getLogin();
         this.sb.delete(0, this.sb.length());
-        this.sb.append(login);
+        this.sb.append(profile.getLogin());
         this.sb.append(":");
-        this.sb.append(passw);
-        this.encprofile = Base64.encode(this.sb.toString().getBytes());
+        this.sb.append(profile.getPassword());
+        this.encodedProfile = Base64.encode(this.sb.toString().getBytes());
     }
 
     @Override
@@ -43,10 +40,11 @@ public class API implements IAPI {
         sb.append(name.replace(" ", "+"));
 
         HttpURLConnection conn = this.getConnection(sb.toString());
+
         conn.setRequestMethod("GET");
         this.sb.delete(0, this.sb.length());
         sb.append("Basic ");
-        sb.append(this.encprofile);
+        sb.append(this.encodedProfile);
         conn.setRequestProperty("Authorization", sb.toString());
 
         return this.getAnswer(conn);
@@ -67,22 +65,39 @@ public class API implements IAPI {
     }
 
     @Override
-    public void addEntry(String name, String type) {
-
+    public void addEntry(int id, String data, String type) {
+        this.sb.delete(0, this.sb.length());
+        sb.append("http://myanimelist.net/api/");
+        sb.append(type);
+        sb.append("list/add/");
+        sb.append(id);
+        sb.append(".xml");
 
     }
 
     @Override
-    public void updateEntry(String name, String type) {
+    public void updateEntry(int id, String data, String type) {
+        this.sb.delete(0, this.sb.length());
+        sb.append("http://myanimelist.net/api/");
+        sb.append(type);
+        sb.append("list/add/");
+        sb.append(id);
+        sb.append(".xml");
 
     }
 
     @Override
-    public void deleteEntry(String name, String type) {
+    public void deleteEntry(int id, String data, String type) {
+        this.sb.delete(0, this.sb.length());
+        sb.append("http://myanimelist.net/api/");
+        sb.append(type);
+        sb.append("list/add/");
+        sb.append(id);
+        sb.append(".xml");
 
     }
 
-    private String getAnswer(HttpURLConnection conn) throws IOException {
+    protected String getAnswer(HttpURLConnection conn) throws IOException {
         if (conn.getResponseCode() == HttpURLConnection.HTTP_OK){
             BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
             String inputs;
@@ -98,7 +113,7 @@ public class API implements IAPI {
         return sb.toString();
     }
 
-    private HttpURLConnection getConnection(String url) throws IOException {
+    protected HttpURLConnection getConnection(String url) throws IOException {
         URL uaddr = new URL(url);
 
         HttpURLConnection conn = (HttpURLConnection) uaddr.openConnection();
@@ -106,7 +121,11 @@ public class API implements IAPI {
         conn.setDoInput(true);
         conn.setDoOutput(false);
         conn.setRequestProperty("User-Agent", "kalong/0.1.0");
-
         return conn;
+    }
+
+    @Override
+    public void run() {
+
     }
 }
