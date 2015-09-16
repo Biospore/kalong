@@ -11,8 +11,10 @@ public class Engine implements IEngine{
     private Set<IProfile> profiles;
     private IProfile activeProfile;
     private ILocalData localData;
+    private final IManager manager;
 
     public Engine(){
+        manager = new Manager();
     }
 
     public void run(){
@@ -27,9 +29,13 @@ public class Engine implements IEngine{
         this.profiles.add(profile);
     }
 
-    @Override
-    public boolean verifyProfile() {
-        return false;
+    public void verifyProfile(IProfile profile) {
+        ITask task = new MyAnimeListTask();
+        task.setTask("verify_profile");
+        task.setData(profile);
+        synchronized (manager) {
+            manager.addTask(task);
+        }
     }
 
     @Override
@@ -81,21 +87,43 @@ public class Engine implements IEngine{
 
     @Override
     public void search(String title) {
+        ITask task = new MyAnimeListTask();
+        task.setTask("search");
+        task.setData(title);
+        synchronized (manager) {
+            manager.addTask(task);
+        }
     }
 
     @Override
     public void addEntry(IEntry entry) {
+        ITask task = new MyAnimeListTask();
+        task.setTask("add");
+        task.setData(entry);
+        synchronized (manager) {
+            manager.addTask(task);
+        }
 
     }
 
     @Override
-    public void deleteEntry(long id) {
-
+    public void deleteEntry(IEntry entry) {
+        ITask task = new MyAnimeListTask();
+        task.setTask("delete");
+        task.setData(entry);
+        synchronized (manager) {
+            manager.addTask(task);
+        }
     }
 
     @Override
-    public void updateEntry(long id) {
-
+    public void updateEntry(IEntry entry) {
+        ITask task = new MyAnimeListTask();
+        task.setTask("update");
+        task.setData(entry);
+        synchronized (manager) {
+            manager.addTask(task);
+        }
     }
 
     @Override

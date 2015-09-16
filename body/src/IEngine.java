@@ -6,7 +6,6 @@ import java.util.TreeMap;
  */
 public interface IEngine extends Runnable {
     public void addProfile(String login, String password);
-    public boolean verifyProfile();
     public IProfile getProfile(String login);
     public Set<IProfile> getProfilesList();
 
@@ -20,8 +19,8 @@ public interface IEngine extends Runnable {
     public void search(String title);
 
     public void addEntry(IEntry entry);
-    public void deleteEntry(long id);
-    public void updateEntry(long id);
+    public void deleteEntry(IEntry entry);
+    public void updateEntry(IEntry entry);
 
     public IEntry getEntry(long id);
 

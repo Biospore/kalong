@@ -11,15 +11,33 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-//should implements runnable
 public class MyAnimeListAPI implements IMyAnimeListAPI {
     private String login;
     private String encodedProfile;
     private StringBuilder sb;
+    private final IManager manager;
+    private ITask currentTask;
 
-    public MyAnimeListAPI(){
+    public MyAnimeListAPI(IManager manager){
         this.sb = new StringBuilder();
+        this.manager = manager;
+        this.currentTask = null;
     }
+
+
+    public String verifyProfile() throws IOException {
+        this.sb.delete(0, this.sb.length());
+        this.sb.append("http://myanimelist.net/api/account/verify_credentials.xml");
+        HttpURLConnection conn = this.getConnection(sb.toString());
+        getConnection("GET");
+        this.sb.delete(0, this.sb.length());
+        sb.append("Basic ");
+        sb.append(this.encodedProfile);
+        conn.setRequestProperty("Authorization", sb.toString());
+
+        return this.getAnswer(conn);
+    }
+
 
     @Override
     public void setProfile(IProfile profile) {
@@ -65,7 +83,7 @@ public class MyAnimeListAPI implements IMyAnimeListAPI {
     }
 
     @Override
-    public void addEntry(int id, String data, String type) {
+    public void addEntry(long id, String data, String type) {
         this.sb.delete(0, this.sb.length());
         sb.append("http://myanimelist.net/api/");
         sb.append(type);
@@ -76,7 +94,7 @@ public class MyAnimeListAPI implements IMyAnimeListAPI {
     }
 
     @Override
-    public void updateEntry(int id, String data, String type) {
+    public void updateEntry(long id, String data, String type) {
         this.sb.delete(0, this.sb.length());
         sb.append("http://myanimelist.net/api/");
         sb.append(type);
@@ -87,7 +105,7 @@ public class MyAnimeListAPI implements IMyAnimeListAPI {
     }
 
     @Override
-    public void deleteEntry(int id, String data, String type) {
+    public void deleteEntry(long id, String data, String type) {
         this.sb.delete(0, this.sb.length());
         sb.append("http://myanimelist.net/api/");
         sb.append(type);
@@ -126,6 +144,13 @@ public class MyAnimeListAPI implements IMyAnimeListAPI {
 
     @Override
     public void run() {
-
+            synchronized (this.manager){
+                if (!this.manager.isEmpty()){
+                    currentTask = this.manager.getTask();
+                }
+            }
+        if (currentTask != null){
+            System.out.println("x");
+        }
     }
 }
