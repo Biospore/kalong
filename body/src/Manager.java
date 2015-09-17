@@ -26,9 +26,9 @@ public class Manager implements IManager {
  * Tasks:
  *  verify_profile
  *  set_profile IProfile(data)
- *  search_entry name type
+ *  search name type
  *  get_list type
- *  add_entry id xml_data type
- *  update_entry id xml_data type
- *  delete_entry id xml_data type
+ *  add id xml_data type
+ *  update id xml_data type
+ *  delete id xml_data type
  */

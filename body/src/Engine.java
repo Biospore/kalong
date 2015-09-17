@@ -112,6 +112,7 @@ public class Engine implements IEngine{
         ITask task = new MyAnimeListTask();
         task.setTask("search");
         task.setData(title);
+        task.setType("anime");
         synchronized (manager) {
             manager.addTask(task);
         }
@@ -132,7 +133,7 @@ public class Engine implements IEngine{
     public void deleteEntry(IEntry entry) {
         ITask task = new MyAnimeListTask();
         task.setTask("delete");
-        task.setData(entry);
+        task.setId(entry.getId());
         synchronized (manager) {
             manager.addTask(task);
         }

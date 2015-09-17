@@ -17,7 +17,17 @@ public class CLI implements Runnable {
     @Override
     public void run() {
         String[] cmd = scanner.nextLine().split(" ");
-        if (cmd[0].equals("add_profile")){
+        if (cmd[0].equals("?")){
+            System.out.println("Help:");
+            System.out.println("\tadd_profile <login> <password>\tSet up new profile.");
+            System.out.println("\tget_profile_info <login>\tShow profile info by login.");
+            System.out.println("\tdel_profile <login>\tRemove profile with 'login'.");
+            System.out.println("\tget_all_profiles\tShow all profiles.");
+            System.out.println("\tget_active_profile\tShow active profile info.");
+            System.out.println("\tset_active_profile <login>\tChange active profile to <login>.");
+            System.out.println("\tget_list\tShow all <type> list.");
+        }
+        else if (cmd[0].equals("add_profile")){
             engine.addProfile(cmd[1], cmd[2]);
         }
         else if (cmd[0].equals("get_profile_info")){
@@ -37,7 +47,6 @@ public class CLI implements Runnable {
                 System.out.println();
                 System.out.println("Profiles:");
                 System.out.println("\tProfile:\t".concat(profile.getLogin()));
-                System.out.println("\tPassword:\t".concat(profile.getPassword()));
             }
         }
         else if(cmd[0].equals("del_profile")){
@@ -58,6 +67,14 @@ public class CLI implements Runnable {
             else{
                 System.out.println("An error occurred!");
             }
+        }
+        else if(cmd[0].equals("set_active_profile")){
+                if (engine.setActiveProfile(cmd[1])){
+                    System.out.println("Active profile changed!");
+                }
+            else{
+                    System.out.println("An error occurred!");
+                }
         }
         else if(cmd[0].equals("get_list")){
             Collection<IEntry> list =  engine.getList();
@@ -85,6 +102,7 @@ public class CLI implements Runnable {
  * get_all_profiles => Set<IProfile>
  * del_profile login  => true || false
  * get_active_profile login => IProfile || null
+ * set_active_profile login => true || false
  * get_list => TreeMap<Long, IEntry>
  *
  */
