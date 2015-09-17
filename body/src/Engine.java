@@ -1,6 +1,9 @@
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by biospore on 9/15/15.
@@ -49,13 +52,30 @@ public class Engine implements IEngine{
     }
 
     @Override
+    public boolean deleteProfile(String login) {
+        for (IProfile profile : profiles){
+            if (profile.getLogin().equals(login)){
+                profiles.remove(profile);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
     public Set<IProfile> getProfilesList() {
         return this.profiles;
     }
 
     @Override
-    public void setActiveProfile(IProfile profile) {
-        this.activeProfile = profile;
+    public boolean setActiveProfile(String login) {
+        for (IProfile profile : profiles){
+            if (profile.getLogin().equals(login)){
+                this.activeProfile = profile;
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
@@ -64,7 +84,7 @@ public class Engine implements IEngine{
     }
 
     @Override
-    public TreeMap<Long, IEntry> getList() {
+    public Collection<IEntry> getList() {
         return this.localData.getAllEntries();
     }
 
@@ -74,15 +94,17 @@ public class Engine implements IEngine{
     }
 
     @Override
-    public IEntry searchLocal(String title) {
-        TreeMap<Long, IEntry> localList = this.localData.getAllEntries();
-        Collection<IEntry> entries =  localList.values();
-        for (IEntry entry: entries){
-            if (entry.getTitle().equals(title)){
-                return entry;
+    public Collection<IEntry> searchLocal(String title) {
+        Collection<IEntry> localList = this.localData.getAllEntries();
+        Collection<IEntry> correctEntries = new ArrayList<IEntry>();
+        Pattern pattern = Pattern.compile("(.*)(" + title + ")(.*)");
+        for (IEntry entry: localList){
+            Matcher matcher = pattern.matcher(entry.getTitle());
+            if (matcher.find()){
+                correctEntries.add(entry);
             }
         }
-        return null;
+        return correctEntries;
     }
 
     @Override
@@ -128,7 +150,7 @@ public class Engine implements IEngine{
 
     @Override
     public IEntry getEntry(long id) {
-        return this.localData.getAllEntries().get(id);
+        return this.localData.getEntry(id);
     }
     @Override
     public void saveLocalData() {

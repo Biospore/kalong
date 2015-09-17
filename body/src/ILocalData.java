@@ -1,5 +1,6 @@
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.TreeMap;
 
 /**
@@ -11,6 +12,6 @@ public interface ILocalData extends Serializable{
     void updateEntry(long id);
     void deleteEntry(long id);
     boolean containEntry(long id);
-    TreeMap<Long, IEntry> getAllEntries();
+    Collection<IEntry> getAllEntries();
     void mergeLists(TreeMap<Long, IEntry> list);
 }

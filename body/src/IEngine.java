@@ -1,3 +1,4 @@
+import java.util.Collection;
 import java.util.Set;
 import java.util.TreeMap;
 
@@ -5,24 +6,25 @@ import java.util.TreeMap;
  * Created by biospore on 9/17/15.
  */
 public interface IEngine extends Runnable {
-    public void addProfile(String login, String password);
-    public IProfile getProfile(String login);
-    public Set<IProfile> getProfilesList();
+    void addProfile(String login, String password);
+    IProfile getProfile(String login);
+    boolean deleteProfile(String login);
+    Set<IProfile> getProfilesList();
 
-    public void setActiveProfile(IProfile profile);
-    public IProfile getActiveProfile();
+    boolean setActiveProfile(String login);
+    IProfile getActiveProfile();
 
-    public TreeMap<Long, IEntry> getList();
-    public void updateList(TreeMap<Long, IEntry> list);
+    Collection<IEntry> getList();
+    void updateList(TreeMap<Long, IEntry> list);
 
-    public IEntry searchLocal(String title);
-    public void search(String title);
+    Collection<IEntry> searchLocal(String title);
+    void search(String title);
 
-    public void addEntry(IEntry entry);
-    public void deleteEntry(IEntry entry);
-    public void updateEntry(IEntry entry);
+    void addEntry(IEntry entry);
+    void deleteEntry(IEntry entry);
+    void updateEntry(IEntry entry);
 
-    public IEntry getEntry(long id);
+    IEntry getEntry(long id);
 
-    public void saveLocalData();
+    void saveLocalData();
 }
