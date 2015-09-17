@@ -2,8 +2,7 @@
  * Created by biospore on 9/11/15 (2:19 AM).
  */
 
-import com.sun.org.apache.xml.internal.security.utils.Base64;
-
+import java.util.Base64;
 import javax.xml.ws.http.HTTPException;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -46,7 +45,7 @@ public class MyAnimeListAPI implements IMyAnimeListAPI {
         this.sb.append(profile.getLogin());
         this.sb.append(":");
         this.sb.append(profile.getPassword());
-        this.encodedProfile = Base64.encode(this.sb.toString().getBytes());
+        this.encodedProfile = Base64.getEncoder().encodeToString(this.sb.toString().getBytes());
     }
 
     @Override
