@@ -1,3 +1,5 @@
+package heart;
+
 import java.util.Collection;
 import java.util.Set;
 import java.util.TreeMap;
@@ -5,7 +7,7 @@ import java.util.TreeMap;
 /**
  * Created by biospore on 9/17/15.
  */
-public interface IEngine extends Runnable {
+public interface IEngine{
     void addProfile(String login, String password);
     IProfile getProfile(String login);
     boolean deleteProfile(String login);

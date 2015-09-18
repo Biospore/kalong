@@ -1,0 +1,25 @@
+<list>
+	<task>
+		Создать пакеты для каждой группы классов и интерфейсов.
+		<packages>
+			<package name="flesh" type="logic">
+				<name type="engine">Heart</name>
+				<name type="manager">Brain</name>
+				<name type="API">Eyes</name>
+				<name type="parser">Mouth</name>
+			</package>
+			<package name="mind" type="data">
+				<name type="profile">Personality</name>
+				<name type="task">Thought</name>
+				<name type="entry">Flashback</name>
+				<name type="localdata">Memory</name>
+			</package>
+			<package name="hide" type="ui">
+				<name type="cli">Skin</name>
+			</package>
+		</packages>
+	</task>
+	<task>
+		Реорганизовать архитектуру.
+	</task>
+</list>
