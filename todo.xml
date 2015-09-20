@@ -1,11 +1,11 @@
 <list>
 	<task>
 		Создать пакеты для каждой группы классов и интерфейсов.
-		<packages>
+		<packages type="code">
 			<package name="flesh" type="logic">
 				<name type="engine">Heart</name>
 				<name type="manager">Brain</name>
-				<name type="API">Eyes</name>
+				<name type="api">Eyes</name>
 				<name type="parser">Mouth</name>
 			</package>
 			<package name="mind" type="data">
@@ -17,9 +17,21 @@
 			<package name="hide" type="ui">
 				<name type="cli">Skin</name>
 			</package>
+			<package name="injuries" type="exceptions">
+			</package>
+		</packages>
+		<packages type="service">
+			<package type="MyAnimeList">Cloth</package>
+			<package type="HummingBird">Iron</package>
+			<package type="AniDB">Stone</package>
+			<package type="AniList">Clay</package>
+			<package type="all">Symbiosis</package>
 		</packages>
 	</task>
 	<task>
 		Реорганизовать архитектуру.
+	</task>
+	<Clothtask>
+		Создать файл запуска.
 	</task>
 </list>
