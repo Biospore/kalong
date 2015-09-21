@@ -12,12 +12,17 @@
 				<name type="profile">Personality</name>
 				<name type="task">Thought</name>
 				<name type="entry">Flashback</name>
-				<name type="localdata">Memory</name>
+				<name type="local_data">Memory</name>
+				<name type="tasks_database">Opinion</name>
 			</package>
 			<package name="hide" type="ui">
 				<name type="cli">Skin</name>
 			</package>
 			<package name="injuries" type="exceptions">
+                <name type="no entry found">NoFlashbackFound</name>
+                <name type="no profile found">NoPersonalityFound</name>
+                <name type="task without 'task_name'">ThoughtWithoutTask</name>
+                <name type="wrong data type">WrongType</name>
 			</package>
 		</packages>
 		<packages type="service">
